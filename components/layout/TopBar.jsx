@@ -11,12 +11,12 @@ import Loader from "@components/Loader";
 
 const TopBar = () => {
   const { user, isLoaded } = useUser();
+
   const [loading, setLoading] = useState(true);
-  const [userData, setUserData] = useState(null); // Inicializa con null
-  const [search, setSearch] = useState("");
+
+  const [userData, setUserData] = useState({});
 
   const getUser = async () => {
-    if (!user?.id) return; // Verifica si user.id está definido
     const response = await fetch(`/api/user/${user.id}`);
     const data = await response.json();
     setUserData(data);
@@ -30,6 +30,7 @@ const TopBar = () => {
   }, [user]);
 
   const router = useRouter();
+  const [search, setSearch] = useState("");
 
   return !isLoaded || loading ? (
     <Loader />
@@ -57,15 +58,14 @@ const TopBar = () => {
       </button>
 
       <div className="flex gap-4 md:hidden">
-        {userData && (
-          <Link href={`/profile/${userData._id}/posts`}>
-            <Person sx={{ fontSize: "35px", color: "white" }} />
-          </Link>
-        )}
+        <Link href={`/profile/${userData._id}/posts`}>
+          <Person sx={{ fontSize: "35px", color: "white" }} />
+        </Link>
+
         <UserButton appearance={{ baseTheme: dark }} afterSignOutUrl="/sign-in" />
       </div>
     </div>
   );
 };
 
-export default TopBar; 
+export default TopBar;

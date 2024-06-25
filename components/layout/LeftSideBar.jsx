@@ -10,12 +10,12 @@ import Loader from "@components/Loader";
 
 const LeftSideBar = () => {
   const { user, isLoaded } = useUser();
+
   const [loading, setLoading] = useState(true);
-  const [userData, setUserData] = useState(null); // Inicializa con null
+
+  const [userData, setUserData] = useState({});
 
   const getUser = async () => {
-    if (!user?.id) return; // Verifica si user.id está definido
-
     const response = await fetch(`/api/user/${user.id}`);
     const data = await response.json();
     setUserData(data);
@@ -36,38 +36,36 @@ const LeftSideBar = () => {
         <Image src="/assets/logo.png" alt="logo" width={200} height={200} />
       </Link>
 
-      {userData && (
-        <div className="flex flex-col gap-2">
-          <div className="flex flex-col gap-2 items-center text-light-1">
-            <Link href={`/profile/${userData._id}/posts`}>
-              <Image
-                src={userData?.profilePhoto}
-                alt="profile photo"
-                width={50}
-                height={50}
-                className="rounded-full"
-              />
-            </Link>
-            <p className="text-small-bold">
-              {userData?.firstName} {userData?.lastName}
-            </p>
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 items-center text-light-1">
+          <Link href={`/profile/${userData._id}/posts`}>
+            <Image
+              src={userData?.profilePhoto}
+              alt="profile photo"
+              width={50}
+              height={50}
+              className="rounded-full"
+            />
+          </Link>
+          <p className="text-small-bold">
+            {userData?.firstName} {userData?.lastName}
+          </p>
+        </div>
+        <div className="flex text-light-1 justify-between">
+          <div className="flex flex-col items-center">
+            <p className="text-base-bold">{userData?.posts?.length}</p>
+            <p className="text-tiny-medium">Posts</p>
           </div>
-          <div className="flex text-light-1 justify-between">
-            <div className="flex flex-col items-center">
-              <p className="text-base-bold">{userData?.posts?.length}</p>
-              <p className="text-tiny-medium">Posts</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <p className="text-base-bold">{userData?.followers?.length}</p>
-              <p className="text-tiny-medium">Followers</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <p className="text-base-bold">{userData?.following?.length}</p>
-              <p className="text-tiny-medium">Following</p>
-            </div>
+          <div className="flex flex-col items-center">
+            <p className="text-base-bold">{userData?.followers?.length}</p>
+            <p className="text-tiny-medium">Followers</p>
+          </div>
+          <div className="flex flex-col items-center">
+            <p className="text-base-bold">{userData?.following?.length}</p>
+            <p className="text-tiny-medium">Following</p>
           </div>
         </div>
-      )}
+      </div>
 
       <hr />
 
